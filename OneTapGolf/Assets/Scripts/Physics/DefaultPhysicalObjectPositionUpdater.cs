@@ -7,7 +7,7 @@ namespace OneTapGolf.Physics {
         }
 
         public void UpdatePhysicalObjectPosition(float timeElapsed) {
-            physicalObject.position += physicalObject.velocity;
+            physicalObject.position += physicalObject.velocity * timeElapsed;
         }
     }
 }
