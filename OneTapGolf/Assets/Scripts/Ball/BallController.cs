@@ -2,7 +2,7 @@ using OneTapGolf.Physics;
 using UnityEngine;
 
 namespace OneTapGolf.Ball {
-    public class Ball {
+    public class BallController {
         public readonly PhysicalObject physicalObject;
         public readonly float groundLevel;
         private readonly IPhysicalObjectVelocityUpdater velocityUpdater;
@@ -10,7 +10,7 @@ namespace OneTapGolf.Ball {
         private readonly float groundFrictionAcceleration;
         private readonly float bounceAccelerationLoss;
 
-        public Ball(Vector2 position, Vector2 gravityAcceleration, 
+        public BallController(Vector2 position, Vector2 gravityAcceleration, 
             float groundLevel, float groundFrictionAcceleration, float bounceAccelerationLoss) {
             physicalObject = new PhysicalObject(position);
             physicalObject.AddAcceleration(gravityAcceleration);

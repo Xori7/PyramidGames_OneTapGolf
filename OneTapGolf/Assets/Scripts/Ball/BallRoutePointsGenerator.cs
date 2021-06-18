@@ -3,9 +3,9 @@ using UnityEngine;
 
 namespace OneTapGolf.Ball {
     public class BallRoutePointsGenerator {
-        private readonly Ball ball;
+        private readonly BallController ball;
 
-        public BallRoutePointsGenerator(Ball ball) {
+        public BallRoutePointsGenerator(BallController ball) {
             this.ball = ball;
         }
 
