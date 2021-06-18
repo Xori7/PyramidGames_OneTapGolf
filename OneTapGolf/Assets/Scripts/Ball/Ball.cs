@@ -3,19 +3,17 @@ using UnityEngine;
 
 namespace OneTapGolf.Ball {
     public class Ball {
-        private readonly PhysicalObject physicalObject;
-        private readonly BallObject ballObject;
+        public readonly PhysicalObject physicalObject;
+        public readonly float groundLevel;
         private readonly IPhysicalObjectVelocityUpdater velocityUpdater;
         private readonly IPhysicalObjectPositionUpdater positionUpdater;
-        private readonly float groundLevel;
         private readonly float groundFrictionAcceleration;
         private readonly float bounceAccelerationLoss;
 
-        public Ball(BallObject ballObject, Vector2 position, Vector2 gravityAcceleration, 
+        public Ball(Vector2 position, Vector2 gravityAcceleration, 
             float groundLevel, float groundFrictionAcceleration, float bounceAccelerationLoss) {
             physicalObject = new PhysicalObject(position);
             physicalObject.AddAcceleration(gravityAcceleration);
-            this.ballObject = ballObject;
             velocityUpdater = new DefaultPhysicalObjectVelocityUpdater(physicalObject);
             positionUpdater = new DefaultPhysicalObjectPositionUpdater(physicalObject);
             this.groundLevel = groundLevel;
@@ -33,11 +31,11 @@ namespace OneTapGolf.Ball {
                 //Calculate ground friction
                 physicalObject.velocity += new Vector2(Mathf.Clamp(groundFrictionAcceleration, -physicalObject.velocity.x, float.MaxValue), 0);
             }
+
             velocityUpdater.UpdatePhysicalObjectVelocity(timeElapsed);
             positionUpdater.UpdatePhysicalObjectPosition(timeElapsed);
-
-            ballObject.transform.position = physicalObject.position;
         }
+
         private void OnCollisionWithGround() {
             //Set y position to ground position when ball tries to escape the map
             physicalObject.position = new Vector2(physicalObject.position.x, groundLevel);
