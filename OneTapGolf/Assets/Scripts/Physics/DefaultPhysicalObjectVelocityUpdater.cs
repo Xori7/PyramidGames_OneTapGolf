@@ -9,7 +9,7 @@ namespace OneTapGolf.Physics {
         }
 
         public void UpdatePhysicalObjectVelocity(float timeElapsed, Vector2 additionalForce = default) {
-            physicalObject.velocity += (physicalObject.force + additionalForce) * timeElapsed;
+            physicalObject.velocity += (physicalObject.acceleration + additionalForce) * timeElapsed;
         }
     }
 }
