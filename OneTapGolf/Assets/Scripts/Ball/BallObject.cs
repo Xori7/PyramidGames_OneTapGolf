@@ -51,7 +51,8 @@ namespace OneTapGolf.Ball {
                     }
                     break;
                 case BallState.Throwed:
-                    if (BallController.physicalObject.velocity.x == 0) {
+                    if (BallController.physicalObject.velocity.x == 0
+                        || BallController.physicalObject.position.x > GameManager.Singleton.CameraHorizontalRange) {
                         GameManager.Singleton.Lost();
                     }
                     break;
@@ -90,7 +91,7 @@ namespace OneTapGolf.Ball {
             BallController.physicalObject.velocity = new Vector2(0, 0);
             timeElapsed += Time.fixedDeltaTime;
 
-            if (points.Last().x > 10) {
+            if (points.Last().x > GameManager.Singleton.CameraHorizontalRange) {
                 Throw();
             }
         }
