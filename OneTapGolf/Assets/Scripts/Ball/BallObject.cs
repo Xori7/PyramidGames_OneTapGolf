@@ -21,10 +21,9 @@ namespace OneTapGolf.Ball {
 
 
         public void Initialize() {
-            StopAllCoroutines();
             BallController = new BallController(transform.position, Physics2D.gravity, -1.68f, -0.1f, 0.4f);
             routePointsGenerator = new BallRoutePointsGenerator(BallController);
-            timeElapsed = 3;
+            timeElapsed = 0;
             state = BallState.Static;
         }
 
