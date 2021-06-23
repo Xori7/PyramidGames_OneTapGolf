@@ -21,10 +21,9 @@ namespace OneTapGolf.Ball {
 
 
         public void Initialize() {
-            StopAllCoroutines();
             BallController = new BallController(transform.position, Physics2D.gravity, -1.68f, -0.1f, 0.4f);
             routePointsGenerator = new BallRoutePointsGenerator(BallController);
-            timeElapsed = 3;
+            timeElapsed = 0;
             state = BallState.Static;
         }
 
@@ -32,22 +31,34 @@ namespace OneTapGolf.Ball {
             Initialize();
         }
 
+        private void Update() {
+            UpdateState();
+        }
+
         private void FixedUpdate() {
+            if (state == BallState.Throwed) {
+                BallController.OnUpdate(Time.fixedDeltaTime);
+                transform.position = BallController.physicalObject.position;
+            }
+        }
+
+        private void UpdateState() {
             switch (state) {
                 case BallState.Static:
-                    if (Input.GetButtonDown("Fire1")) {
+                    if (Input.GetKeyDown(KeyCode.Mouse0)) {
                         state = BallState.Wait;
                     }
                     break;
                 case BallState.Throwed:
-                    BallController.OnUpdate(Time.fixedDeltaTime);
-                    transform.position = BallController.physicalObject.position;
+                    if (BallController.physicalObject.velocity.x == 0
+                        || BallController.physicalObject.position.x > GameManager.Singleton.CameraHorizontalRange) {
+                        GameManager.Singleton.Lost();
+                    }
                     break;
                 case BallState.Wait:
                     WhileWaiting();
-                    if (Input.GetButtonUp("Fire1")) {
+                    if (Input.GetKeyUp(KeyCode.Mouse0)) {
                         Throw();
-                        state = BallState.Throwed;
                     }
                     break;
             }
@@ -58,14 +69,7 @@ namespace OneTapGolf.Ball {
             foreach (GameObject point in routePoints) {
                 point.gameObject.SetActive(false);
             }
-            StartCoroutine(Wait());
-        }
-
-        private IEnumerator Wait() {
-            yield return new WaitForSeconds(5);
-            if (state == BallState.Throwed) {
-                GameManager.Singleton.Lost();
-            }
+            state = BallState.Throwed;
         }
 
         private void WhileWaiting() {
@@ -86,7 +90,7 @@ namespace OneTapGolf.Ball {
             BallController.physicalObject.velocity = new Vector2(0, 0);
             timeElapsed += Time.fixedDeltaTime;
 
-            if (points.Last().x > 10) {
+            if (points.Last().x > GameManager.Singleton.CameraHorizontalRange) {
                 Throw();
             }
         }
