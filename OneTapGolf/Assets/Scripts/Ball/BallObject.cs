@@ -32,22 +32,33 @@ namespace OneTapGolf.Ball {
             Initialize();
         }
 
+        private void Update() {
+            UpdateState();
+        }
+
         private void FixedUpdate() {
+            if (state == BallState.Throwed) {
+                BallController.OnUpdate(Time.fixedDeltaTime);
+                transform.position = BallController.physicalObject.position;
+            }
+        }
+
+        private void UpdateState() {
             switch (state) {
                 case BallState.Static:
-                    if (Input.GetButtonDown("Fire1")) {
+                    if (Input.GetKeyDown(KeyCode.Mouse0)) {
                         state = BallState.Wait;
                     }
                     break;
                 case BallState.Throwed:
-                    BallController.OnUpdate(Time.fixedDeltaTime);
-                    transform.position = BallController.physicalObject.position;
+                    if (BallController.physicalObject.velocity.x == 0) {
+                        GameManager.Singleton.Lost();
+                    }
                     break;
                 case BallState.Wait:
                     WhileWaiting();
-                    if (Input.GetButtonUp("Fire1")) {
+                    if (Input.GetKeyUp(KeyCode.Mouse0)) {
                         Throw();
-                        state = BallState.Throwed;
                     }
                     break;
             }
@@ -58,14 +69,7 @@ namespace OneTapGolf.Ball {
             foreach (GameObject point in routePoints) {
                 point.gameObject.SetActive(false);
             }
-            StartCoroutine(Wait());
-        }
-
-        private IEnumerator Wait() {
-            yield return new WaitForSeconds(5);
-            if (state == BallState.Throwed) {
-                GameManager.Singleton.Lost();
-            }
+            state = BallState.Throwed;
         }
 
         private void WhileWaiting() {
