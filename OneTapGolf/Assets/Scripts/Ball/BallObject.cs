@@ -4,25 +4,24 @@ using System.Linq;
 using UnityEngine;
 
 namespace OneTapGolf.Ball {
-    public enum BallState {
+    enum BallState {
         Static,
         Wait,
         Throwed
     }
 
     public class BallObject : MonoBehaviour {
-        public GameObject routePointPrefab;
-        public BallController BallController { get; private set; }
-        public BallState state;
         public float xVelocity, yVelocity;
+        [SerializeField] private GameObject routePointPrefab;
+        [SerializeField] private BallController ballController;
+        private BallState state;
         private List<GameObject> routePoints = new List<GameObject>();
         private BallRoutePointsGenerator routePointsGenerator;
         private float timeElapsed;
 
-
         public void Initialize() {
-            BallController = new BallController(transform.position, Physics2D.gravity, -1.68f, -0.1f, 0.4f);
-            routePointsGenerator = new BallRoutePointsGenerator(BallController);
+            ballController = new BallController(transform.position, Physics2D.gravity, -1.68f, -0.1f, 0.4f);
+            routePointsGenerator = new BallRoutePointsGenerator(ballController);
             timeElapsed = 0;
             state = BallState.Static;
         }
@@ -37,8 +36,8 @@ namespace OneTapGolf.Ball {
 
         private void FixedUpdate() {
             if (state == BallState.Throwed) {
-                BallController.OnUpdate(Time.fixedDeltaTime);
-                transform.position = BallController.physicalObject.position;
+                ballController.OnUpdate(Time.fixedDeltaTime);
+                transform.position = ballController.physicalObject.position;
             }
         }
 
@@ -50,8 +49,8 @@ namespace OneTapGolf.Ball {
                     }
                     break;
                 case BallState.Throwed:
-                    if (BallController.physicalObject.velocity.x == 0
-                        || BallController.physicalObject.position.x > GameManager.Singleton.CameraHorizontalRange) {
+                    if (ballController.physicalObject.velocity.x == 0
+                        || ballController.physicalObject.position.x > GameManager.Singleton.CameraHorizontalRange) {
                         GameManager.Singleton.Lost();
                     }
                     break;
@@ -65,7 +64,7 @@ namespace OneTapGolf.Ball {
         }
 
         private void Throw() {
-            BallController.Throw(new Vector2(xVelocity, yVelocity) * timeElapsed);
+            ballController.Throw(new Vector2(xVelocity, yVelocity) * timeElapsed);
             foreach (GameObject point in routePoints) {
                 point.gameObject.SetActive(false);
             }
@@ -73,7 +72,7 @@ namespace OneTapGolf.Ball {
         }
 
         private void WhileWaiting() {
-            BallController.Throw(new Vector2(xVelocity, yVelocity) * timeElapsed);
+            ballController.Throw(new Vector2(xVelocity, yVelocity) * timeElapsed);
             Vector2[] points = routePointsGenerator.GetPoints(0.01f / timeElapsed);
             for (int i = 0; i < points.Length; i++) {
                 if (routePoints.Count <= i) {
@@ -86,8 +85,8 @@ namespace OneTapGolf.Ball {
                 }
             }
 
-            BallController.physicalObject.position = transform.position;
-            BallController.physicalObject.velocity = new Vector2(0, 0);
+            ballController.physicalObject.position = transform.position;
+            ballController.physicalObject.velocity = new Vector2(0, 0);
             timeElapsed += Time.fixedDeltaTime;
 
             if (points.Last().x > GameManager.Singleton.CameraHorizontalRange) {

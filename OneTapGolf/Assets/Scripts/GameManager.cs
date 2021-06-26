@@ -5,13 +5,13 @@ using UnityEngine.UI;
 namespace OneTapGolf {
     public class GameManager : MonoBehaviour {
         public static GameManager Singleton { get; private set; }
-        public Target target;
         public BallObject ball;
+        [SerializeField] private Target target;
 
-        public Text scoreText;
-        public Text lostText;
+        [SerializeField] private Text scoreText;
+        [SerializeField] private Text lostText;
 
-        public float xVelocity, yVelocity;
+        [SerializeField] private float xVelocity, yVelocity;
         public float CameraHorizontalRange { get; private set; }
 
         private int level;

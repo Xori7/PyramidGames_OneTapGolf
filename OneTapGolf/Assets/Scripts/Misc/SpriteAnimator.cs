@@ -6,8 +6,8 @@ using UnityEngine;
 public class SpriteAnimator : MonoBehaviour {
     private SpriteRenderer spriteRenderer;
 
-    public Sprite[] sprites;
-    public float frameDuration;
+    [SerializeField] private Sprite[] sprites;
+    [SerializeField] private float frameDuration;
 
     private int currentSpriteId;
 
