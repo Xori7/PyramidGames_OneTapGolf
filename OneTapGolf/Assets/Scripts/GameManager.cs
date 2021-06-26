@@ -24,6 +24,9 @@ namespace OneTapGolf {
             LoadNextLevel();
         }
 
+        ///<summary>
+        ///Resets game and loads next ball position and target position. Also increases start ball velocity by 50% and increments player score
+        ///</summary>
         public void LoadNextLevel() {
             CameraHorizontalRange = Camera.main.orthographicSize * Screen.width / Screen.height;
             target.transform.position = new Vector3(Random.Range(-CameraHorizontalRange + 3.0f, CameraHorizontalRange - 1.0f), target.transform.position.y, 0.0f);
@@ -35,6 +38,9 @@ namespace OneTapGolf {
             scoreText.text = $"SCORE: {level}";
         }
 
+        ///<summary>
+        ///Shows "GAME OVER!" menu and updates best score
+        ///</summary>
         public void Lost() {
             lostText.text = $"GAME OVER!\n\nSCORE: {level} BEST: {best}";
             lostText.gameObject.SetActive(true);
@@ -43,6 +49,9 @@ namespace OneTapGolf {
             }
         }
 
+        ///<summary>
+        ///Resets score and start ball velocity. Loads next level with id -1
+        ///</summary>
         public void StartAgain() {
             level = -1;
             LoadNextLevel();

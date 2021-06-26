@@ -8,8 +8,8 @@ namespace OneTapGolf.Physics {
             this.physicalObject = physicalObject ?? throw new System.ArgumentNullException(nameof(physicalObject));
         }
 
-        public void UpdatePhysicalObjectVelocity(float timeElapsed, Vector2 additionalForce = default) {
-            physicalObject.velocity += (physicalObject.acceleration + additionalForce) * timeElapsed;
+        public void UpdatePhysicalObjectVelocity(float timeElapsed, Vector2 additionalAcceleration = default) {
+            physicalObject.velocity += (physicalObject.acceleration + additionalAcceleration) * timeElapsed;
         }
     }
 }

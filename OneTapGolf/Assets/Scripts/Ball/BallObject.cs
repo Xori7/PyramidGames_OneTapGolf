@@ -19,6 +19,9 @@ namespace OneTapGolf.Ball {
         private BallRoutePointsGenerator routePointsGenerator;
         private float timeElapsed;
 
+        ///<summary>
+        ///Resets BallObject fields to default values and prepares class object to reuse
+        ///</summary>
         public void Initialize() {
             ballController = new BallController(transform.position, Physics2D.gravity, -1.68f, -0.1f, 0.4f);
             routePointsGenerator = new BallRoutePointsGenerator(ballController);

@@ -20,11 +20,16 @@ namespace OneTapGolf.Ball {
             this.groundFrictionAcceleration = groundFrictionAcceleration;
             this.bounceAccelerationLoss = bounceAccelerationLoss;
         }
-
+        ///<summary>
+        ///Adds "startVelocity" to ball physical object velocity
+        ///</summary>
         public void Throw(Vector2 startVelocity) {
             physicalObject.velocity += startVelocity;
         }
 
+        ///<summary>
+        ///Updates object position and velocity in time "timeElapsed" 
+        ///</summary>
         public void OnUpdate(float timeElapsed) {
             if (physicalObject.position.y < groundLevel) {
                 OnCollisionWithGround();
